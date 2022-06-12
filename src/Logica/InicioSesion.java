@@ -7,50 +7,55 @@ public class InicioSesion {
     static Scanner scanner = new Scanner(System.in);
 
     public static void cargarInformacion(){
+        
         Usuario USUARIO_INICIAL= new Usuario(0, 0, 0, 0, 0, false, "", "",
-                                            "", "", new ArrayList<Integer>(), null, null, null, null);
+                                            "", "", "", new ArrayList<Integer>(){{add(0);add(0);add(0);add(0);add(0);}}, new ArrayList<Producto>(),new ArrayList<Calificacion>(),
+                                            null, null);
             
-        Producto PRODUCTO_INICIAL= new Producto(0, 0, 0, 0, 0, "", "",
-                                                "", "", new ArrayList<Integer>(), 0, 
-                                                null, null, null);
+        Producto PRODUCTO_INICIAL= new Producto((long) 0, 0, 0, (long)0, (long)0, "", "",
+                                                "", "", new ArrayList<Integer>(){{add(0);add(0);add(0);add(0);add(0);}}, new ArrayList<Calificacion>(), (long) 0, 
+                                                null, null);
 
         ManejadorPersonas manejadorPersonas = new ManejadorPersonas();
         ManejadorProductos manejadorProductos = new ManejadorProductos();
 
         //Vacio informacion de archivos a listas
-        manejadorPersonas.existeArchivo("personas.json", "PERSONAS", USUARIO_INICIAL);
-        manejadorProductos.existeArchivo("productos.json", "PRODUCTOS", PRODUCTO_INICIAL);
+        USUARIO_INICIAL=manejadorPersonas.existeArchivo("personas.json", "PERSONAS", USUARIO_INICIAL);
+        PRODUCTO_INICIAL=manejadorProductos.existeArchivo("productos.json", "PRODUCTOS", PRODUCTO_INICIAL);
+
+        if (PRODUCTO_INICIAL == null)
+            manejadorProductos.ultimoID_P= 0;  
+
         //falta categorias
         
-        //calcular estadisticas de calificaciones
-        USUARIO_INICIAL.setPromedio();
-        USUARIO_INICIAL.setTablaCalificaciones();
-        USUARIO_INICIAL.setTotalCalificaciones();
+        //todas estas son interfaces
+        if (USUARIO_INICIAL != null){
+            USUARIO_INICIAL.setEstadisticasCalificaciones();
+        }
 
-        PRODUCTO_INICIAL.setPromedio();
-        PRODUCTO_INICIAL.setTablaCalificaciones();
-        PRODUCTO_INICIAL.setTotalCalificaciones();
+        if (PRODUCTO_INICIAL != null){
+            PRODUCTO_INICIAL.setEstadisticasCalificaciones();
+        }
 
-        //enlazar lista de productos a personas
-        USUARIO_INICIAL.inventario= USUARIO_INICIAL.conectarProducto(PRODUCTO_INICIAL);
+        Usuario usuarioactual = null;
 
-        int id = InicioSesion.login(USUARIO_INICIAL);
+        if (USUARIO_INICIAL != null)
+            usuarioactual = InicioSesion.login(USUARIO_INICIAL);
 
-        if (id>0)
-            PaginaPrincipal.menu(USUARIO_INICIAL, PRODUCTO_INICIAL, manejadorPersonas, manejadorProductos, id);
+        if (usuarioactual != null)
+            PaginaPrincipal.menu(USUARIO_INICIAL, PRODUCTO_INICIAL, manejadorPersonas, manejadorProductos, usuarioactual, 
+                                "personas.json", "productos.json");
     }
 
-    private static int login(Usuario USUARIO_INICIAL) {
+    private static Usuario login(Usuario USUARIO_INICIAL){
         System.out.println("correo ucab");
         String correo = scanner.nextLine();
 
         System.out.println("contrasenia");
         String contrasenia = scanner.nextLine();
 
-        return USUARIO_INICIAL.buscarxcorreo(correo,contrasenia);
+        return USUARIO_INICIAL.buscarxCorreo(correo,contrasenia);
 
-    }
-
-
-    
+        // agregar cambiar contrasenia
+    }    
 }

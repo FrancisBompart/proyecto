@@ -10,8 +10,10 @@ public class PaginaPrincipal {
     static Scanner scanner = new Scanner(System.in);
     static int op;
 
-    public static void menu (Usuario USUARIO_INICIAL, Producto PRODUCTO_INICIAL, ManejadorPersonas manejadorPersonas, ManejadorProductos manejadorProductos, int id) {
-
+    public static void menu (Usuario USUARIO_INICIAL, Producto PRODUCTO_INICIAL, 
+                            ManejadorPersonas manejadorPersonas, ManejadorProductos manejadorProductos, 
+                            Usuario usuarioactual, String rutaPersonas, String rutaProductos) {
+        
         System.out.println("1. Consultar Catalogo");
         System.out.println("2. Consultar Perfil");
         System.out.println("3. Consultar Inventario");
@@ -20,16 +22,16 @@ public class PaginaPrincipal {
 
         switch (op) {
             case 1:
-                Catalogo.menu(USUARIO_INICIAL,PRODUCTO_INICIAL,manejadorPersonas,manejadorProductos);
+                Catalogo.menu(USUARIO_INICIAL,PRODUCTO_INICIAL,manejadorPersonas,manejadorProductos, rutaPersonas, rutaProductos, usuarioactual);
                 break;
             case 2:
-                Perfil.menu(USUARIO_INICIAL,PRODUCTO_INICIAL,manejadorPersonas,manejadorProductos,id);
+                Perfil.menu(USUARIO_INICIAL,manejadorPersonas,usuarioactual.id, rutaPersonas);
                 break;
             case 3:
-                Inventario.menu(USUARIO_INICIAL,PRODUCTO_INICIAL,manejadorPersonas,manejadorProductos);
+                Inventario.menu(PRODUCTO_INICIAL, manejadorProductos, rutaProductos, "PRODUCTOS" , usuarioactual);
                 break;
             case 4:
-                Notificaciones.menu(USUARIO_INICIAL,PRODUCTO_INICIAL,manejadorPersonas,manejadorProductos);
+                Notificaciones.menu(USUARIO_INICIAL, PRODUCTO_INICIAL, manejadorPersonas, manejadorProductos, rutaPersonas, rutaProductos, usuarioactual.id);
                 break;       
         }
     }   
